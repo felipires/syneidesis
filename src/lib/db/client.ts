@@ -1,14 +1,23 @@
-/* The local database: SQLite living in the browser's OPFS via SQLocal.
-   This file is the ONLY place that constructs the engine. It is strictly
-   browser-only (SQLocal spins up a Worker), lazily created on first use, and
-   self-migrating. The repo layer (repo.ts) talks to it; UI never imports it
-   directly. */
+/* The local database: SQLite in the browser via SQLocal, persisted to
+   localStorage (SQLocal's kvvfs driver, selected by databasePath = 'local').
+
+   Why localStorage and not OPFS: OPFS persistence relies on the sqlite-wasm
+   async-proxy worker + SharedArrayBuffer (and so cross-origin isolation). In
+   production that path deadlocked on init ("syncing… forever"). The kvvfs/
+   'local' driver runs on the main thread with no worker, no SharedArrayBuffer
+   and no COOP/COEP — robust across every browser (incl. incognito). Plenty for
+   a personal text journal (~5 MB); revisit OPFS if we ever outgrow it.
+
+   This file is the ONLY place that constructs the engine. It is browser-only,
+   lazily created on first use, and self-migrating. The repo layer (repo.ts)
+   talks to it; UI never imports it directly. */
 
 import { browser } from '$app/environment';
 import { SQLocal } from 'sqlocal';
 import { SCHEMA_SQL } from './schema';
 
-export const DB_FILE = 'syneidesis.sqlite3';
+// 'local' → SQLocal kvvfs driver, persisted to localStorage on the main thread.
+export const DB_FILE = 'local';
 
 let ready: Promise<SQLocal> | null = null;
 
