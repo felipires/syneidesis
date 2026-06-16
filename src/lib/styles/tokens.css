@@ -1,0 +1,228 @@
+/* Syneidesis — design tokens & base styles.
+   Direction: "Ink & Light". See DESIGN.md for rationale.
+   Day = paper (default :root). Night = lamplight ([data-theme='night']).
+   The effective theme is set on <html data-theme> by an inline script (app.html)
+   and the theme store (lib/theme.svelte.ts), so there is no flash. */
+
+/* ---- Day · Paper (default) ------------------------------------------------ */
+:root {
+	--bg: oklch(1 0 0);
+	--surface: oklch(0.975 0.004 255);
+	--ink: oklch(0.25 0.02 255);
+	--muted: oklch(0.52 0.02 255);
+	--hairline: oklch(0.92 0.004 255);
+	--primary: oklch(0.4 0.11 255);
+	--primary-ink: oklch(1 0 0);
+	--accent: oklch(0.72 0.14 70);
+	--accent-soft: oklch(0.72 0.14 70 / 0.14);
+	--danger: oklch(0.52 0.16 25);
+
+	/* type */
+	--font-serif: 'Spectral', 'Newsreader', Georgia, 'Times New Roman', serif;
+	--font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', 'SFMono-Regular', Menlo, monospace;
+
+	/* spacing scale (4px base) */
+	--s-1: 0.25rem;
+	--s-2: 0.5rem;
+	--s-3: 0.75rem;
+	--s-4: 1rem;
+	--s-6: 1.5rem;
+	--s-8: 2rem;
+	--s-12: 3rem;
+	--s-16: 4rem;
+	--s-24: 6rem;
+
+	/* shape */
+	--radius-control: 6px;
+	--radius-panel: 10px;
+
+	/* reading measure */
+	--measure: 66ch;
+
+	/* motion */
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--dur-fast: 150ms;
+	--dur: 220ms;
+
+	/* z-index scale (semantic) */
+	--z-dropdown: 10;
+	--z-sticky: 20;
+	--z-backdrop: 30;
+	--z-overlay: 40;
+	--z-toast: 50;
+
+	color-scheme: light;
+}
+
+/* ---- Night · Lamplight ---------------------------------------------------- */
+[data-theme='night'] {
+	--bg: oklch(0.16 0.015 260);
+	--surface: oklch(0.205 0.018 260);
+	--ink: oklch(0.9 0.008 250);
+	--muted: oklch(0.66 0.012 250);
+	--hairline: oklch(0.28 0.015 260);
+	--primary: oklch(0.72 0.11 255);
+	--primary-ink: oklch(0.16 0.015 260);
+	--accent: oklch(0.8 0.12 70);
+	--accent-soft: oklch(0.8 0.12 70 / 0.16);
+	--danger: oklch(0.7 0.14 25);
+
+	color-scheme: dark;
+}
+
+/* ---- Reset ---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+* {
+	margin: 0;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	min-height: 100dvh;
+	background: var(--bg);
+	color: var(--ink);
+	font-family: var(--font-serif);
+	font-size: 1.0625rem;
+	line-height: 1.6;
+	font-synthesis: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	transition:
+		background var(--dur) var(--ease-out),
+		color var(--dur) var(--ease-out);
+}
+
+/* ---- Typography ----------------------------------------------------------- */
+h1,
+h2,
+h3 {
+	font-family: var(--font-serif);
+	font-weight: 500;
+	line-height: 1.2;
+	text-wrap: balance;
+}
+
+p {
+	text-wrap: pretty;
+}
+
+a {
+	color: var(--primary);
+	text-decoration: none;
+	text-underline-offset: 0.18em;
+}
+a:hover {
+	text-decoration: underline;
+	text-decoration-color: var(--accent);
+}
+
+/* mono meta: dates, labels, counts */
+.meta {
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+	letter-spacing: 0.02em;
+	color: var(--muted);
+}
+
+/* a single reading column */
+.measure {
+	max-width: var(--measure);
+	margin-inline: auto;
+}
+
+/* Rendered markdown for the public reader — same calm serif page as the editor. */
+.prose {
+	font-family: var(--font-serif);
+	font-size: 1.1875rem;
+	line-height: 1.72;
+	color: var(--ink);
+}
+.prose > * + * {
+	margin-top: 0.9em;
+}
+.prose h1,
+.prose h2,
+.prose h3 {
+	font-weight: 500;
+	line-height: 1.2;
+	margin-top: 1.6em;
+}
+.prose h1 {
+	font-size: 1.9rem;
+}
+.prose h2 {
+	font-size: 1.4rem;
+}
+.prose h3 {
+	font-size: 1.2rem;
+}
+.prose blockquote {
+	padding-inline-start: var(--s-4);
+	border-inline-start: 2px solid var(--hairline);
+	color: var(--muted);
+	font-style: italic;
+}
+.prose a {
+	color: var(--primary);
+	text-decoration: underline;
+	text-decoration-color: var(--accent);
+	text-underline-offset: 0.18em;
+}
+.prose code {
+	font-family: var(--font-mono);
+	font-size: 0.9em;
+	background: var(--surface);
+	padding: 0.1em 0.35em;
+	border-radius: 4px;
+}
+.prose pre {
+	background: var(--surface);
+	padding: var(--s-4);
+	border-radius: var(--radius-panel);
+	overflow-x: auto;
+}
+.prose pre code {
+	background: none;
+	padding: 0;
+}
+.prose ul,
+.prose ol {
+	padding-inline-start: 1.4em;
+}
+.prose img {
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--radius-panel);
+}
+
+::selection {
+	background: var(--accent-soft);
+}
+
+/* ---- Focus ---------------------------------------------------------------- */
+:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+	border-radius: 3px;
+}
+
+/* ---- Reduced motion ------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}

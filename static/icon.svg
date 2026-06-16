@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Syneidesis">
+	<rect width="512" height="512" rx="96" fill="oklch(0.16 0.015 260)" />
+	<!-- the page -->
+	<rect x="148" y="120" width="216" height="272" rx="14" fill="oklch(0.97 0.004 255)" />
+	<!-- ink lines -->
+	<g stroke="oklch(0.4 0.11 255)" stroke-width="10" stroke-linecap="round">
+		<line x1="186" y1="178" x2="326" y2="178" />
+		<line x1="186" y1="216" x2="326" y2="216" />
+		<line x1="186" y1="254" x2="288" y2="254" />
+	</g>
+	<!-- the gathered light -->
+	<circle cx="326" cy="316" r="34" fill="oklch(0.8 0.12 70)" />
+	<circle cx="326" cy="316" r="58" fill="none" stroke="oklch(0.8 0.12 70)" stroke-width="6" opacity="0.5" />
+</svg>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" data-theme="day">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
+		<link rel="manifest" href="%sveltekit.assets%/manifest.webmanifest" />
+		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#0c1018" media="(prefers-color-scheme: dark)" />
+		<meta name="description" content="Syneidesis — a quiet place to write and reflect." />
+		<!-- Set the theme before first paint so there is no flash of the wrong mode. -->
+		<script>
+			try {
+				var m = localStorage.getItem('syn-theme') || 'auto';
+				var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+				document.documentElement.dataset.theme = m === 'auto' ? (dark ? 'night' : 'day') : m;
+			} catch (e) {}
+		</script>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>
