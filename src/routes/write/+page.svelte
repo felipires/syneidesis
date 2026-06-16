@@ -68,6 +68,9 @@
 		article = await createArticle({ homeContainerId: journalParam ?? null });
 	});
 
+	// Keep Zen in sync when the user leaves full-screen via Esc / F11 / browser UI.
+	onMount(() => ui.bindFullscreen());
+
 	onDestroy(() => {
 		// Don't leave empty "Untitled" drafts behind if nothing was written.
 		if (article && !title.trim() && !body.trim()) {
