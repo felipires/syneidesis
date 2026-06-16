@@ -107,7 +107,7 @@
 		<!-- Loose writing -->
 		<section class="group">
 			<header class="grouphead">
-				<h2>Loose writing</h2>
+				<h2>Articles</h2>
 			</header>
 			{#if loose.length === 0}
 				<p class="empty">Standalone pieces with no home land here.</p>

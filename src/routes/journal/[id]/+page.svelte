@@ -35,7 +35,7 @@
 	}
 
 	async function removeJournal() {
-		if (!confirm('Delete this journal? Its entries become loose writing.')) return;
+		if (!confirm('Delete this journal? Its entries become articles.')) return;
 		await deleteContainer(id);
 		goto('/');
 	}

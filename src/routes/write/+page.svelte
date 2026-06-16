@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 	import Editor from '$lib/components/Editor.svelte';
 	import VisibilityToggle from '$lib/components/VisibilityToggle.svelte';
 	import { ui } from '$lib/ui.svelte';
@@ -16,6 +17,7 @@
 	let body = $state('');
 	let saveState = $state<SaveState>('idle');
 	let savedTimer: ReturnType<typeof setTimeout> | undefined;
+	let deleted = false; // set on explicit delete so onDestroy doesn't re-save/clean
 
 	// Optional ?id=… to resume an entry; otherwise start a fresh loose draft.
 	const idParam = page.url.searchParams.get('id');
@@ -40,6 +42,17 @@
 		scheduleSave.flush();
 		const next = await updateArticle(article.id, { visibility: v });
 		if (next) article = next;
+	}
+
+	async function remove() {
+		if (!article) return;
+		if (!confirm('Delete this piece? This can’t be undone.')) return;
+		deleted = true;
+		scheduleSave.cancel();
+		const home = article.homeContainerId;
+		await deleteArticle(article.id);
+		sync.nudge();
+		goto(home ? `/journal/${home}` : '/');
 	}
 
 	function onBody(markdown: string) {
@@ -72,8 +85,10 @@
 	onMount(() => ui.bindFullscreen());
 
 	onDestroy(() => {
-		// Don't leave empty "Untitled" drafts behind if nothing was written.
-		if (article && !title.trim() && !body.trim()) {
+		if (deleted) {
+			scheduleSave.cancel();
+		} else if (article && !title.trim() && !body.trim()) {
+			// Don't leave empty "Untitled" drafts behind if nothing was written.
 			scheduleSave.cancel();
 			deleteArticle(article.id);
 		} else {
@@ -101,9 +116,14 @@
 				{saveState === 'saving' ? 'saving' : saveState === 'saved' ? 'saved' : ''}
 			</span>
 		</span>
-		<button class="zenbtn meta" type="button" onclick={() => ui.toggleZen()}>
-			{ui.zen ? 'exit zen — esc' : 'zen'}
-		</button>
+		<span class="right">
+			{#if article}
+				<button class="del meta" type="button" onclick={remove}>delete</button>
+			{/if}
+			<button class="zenbtn meta" type="button" onclick={() => ui.toggleZen()}>
+				{ui.zen ? 'exit zen — esc' : 'zen'}
+			</button>
+		</span>
 	</div>
 
 	{#if article?.visibility === 'public' && article.publicSlug}
@@ -150,6 +170,23 @@
 		display: inline-flex;
 		align-items: center;
 		gap: var(--s-4);
+	}
+	.right {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--s-3);
+	}
+	.del {
+		border: none;
+		background: transparent;
+		color: var(--muted);
+		cursor: pointer;
+		padding: var(--s-1) var(--s-2);
+		border-radius: var(--radius-control);
+		transition: color var(--dur-fast) var(--ease-out);
+	}
+	.del:hover {
+		color: var(--danger);
 	}
 	.share {
 		margin: 0 auto var(--s-4);
