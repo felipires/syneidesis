@@ -36,8 +36,12 @@
 	--radius-control: 6px;
 	--radius-panel: 10px;
 
-	/* reading measure */
-	--measure: 66ch;
+	/* Reading measure. An ABSOLUTE width (not ch): every element bounded by
+	   .measure — the editor body (1.19rem), the title (2rem), the top bar
+	   (0.81rem) — must share the exact same column. `ch` is relative to each
+	   element's font-size, so it would make the larger title overhang the
+	   content. 39rem ≈ a 65ch line at the body serif size. */
+	--measure: 39rem;
 
 	/* motion */
 	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);

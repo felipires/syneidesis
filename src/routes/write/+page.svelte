@@ -213,6 +213,7 @@
 		margin-inline: auto;
 		margin-bottom: var(--s-2);
 		width: 100%;
+		padding: 0; /* line the title's glyph edge up with the editor body */
 		border: none;
 		background: transparent;
 		color: var(--ink);
