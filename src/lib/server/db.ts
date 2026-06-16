@@ -13,7 +13,9 @@ import type { Database } from 'bun:sqlite';
 import { mkdirSync } from 'node:fs';
 import { SCHEMA_SQL, type Article, type Container, type ArticleRef } from '$lib/db/schema';
 
-const DB_DIR = '.data';
+// On a host like Railway, point DATA_DIR at a mounted volume (e.g. /data) so the
+// SQLite file survives redeploys; locally it falls back to ./.data.
+const DB_DIR = process.env.DATA_DIR ?? '.data';
 const DB_PATH = `${DB_DIR}/syneidesis-server.sqlite3`;
 
 const EPOCH = '1970-01-01T00:00:00.000Z';
