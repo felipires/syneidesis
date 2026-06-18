@@ -26,7 +26,7 @@
 	// the author is on an app route.
 	let syncStarted = false;
 	$effect(() => {
-		const isPublic = page.url.pathname.startsWith('/read');
+		const isPublic = page.url.pathname.startsWith('/read') || page.url.pathname === '/login';
 		if (!isPublic && !syncStarted) {
 			syncStarted = true;
 			sync.start();
