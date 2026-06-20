@@ -132,13 +132,15 @@
 		</p>
 	{/if}
 
-	<input
+	<textarea
 		class="title"
 		placeholder="Untitled"
+		rows="1"
 		bind:value={title}
 		oninput={onTitleInput}
+		onkeydown={(e) => e.key === 'Enter' && e.preventDefault()}
 		aria-label="Title"
-	/>
+	></textarea>
 
 	{#if article}
 		<Editor value={body} zen={ui.zen} placeholder="Let a thought arrive…" onChange={onBody} />
@@ -257,6 +259,11 @@
 		font-family: var(--font-serif);
 		font-size: 2rem;
 		font-weight: 500;
+		/* textarea that wraps + grows with its content instead of clipping */
+		field-sizing: content;
+		resize: none;
+		overflow: hidden;
+		line-height: 1.2;
 		line-height: 1.2;
 		letter-spacing: -0.01em;
 	}
