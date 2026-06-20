@@ -156,7 +156,7 @@
 
 	/* Zen focus: the rest of the page recedes; the current line stays full-ink. */
 	.editor.zen .surface :global(.ProseMirror > *) {
-		opacity: 0.32;
+		opacity: 0.50;
 		transition: opacity var(--dur) var(--ease-out);
 	}
 	.editor.zen .surface :global(.ProseMirror > .is-current) {
