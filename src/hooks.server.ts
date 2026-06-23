@@ -6,7 +6,10 @@ import { isAuthed } from '$lib/server/auth';
    by the adapter and bypass this hook, so the login page still loads.) */
 export const handle: Handle = async ({ event, resolve }) => {
 	const { pathname } = event.url;
-	const open = pathname === '/login' || pathname.startsWith('/read');
+	const open =
+		pathname === '/login' ||
+		pathname.startsWith('/read') ||
+		pathname.startsWith('/api/passkey/auth'); // passkey sign-in is pre-login
 
 	if (!open && !isAuthed(event.cookies)) {
 		if (pathname.startsWith('/api')) return new Response('Unauthorized', { status: 401 });

@@ -6,8 +6,10 @@
 
 	// In Zen mode the whole bar lifts away.
 	let hidden = $derived(ui.zen);
-	// Sync status is an app-only concern; hide it on public /read pages.
-	let showSync = $derived(!page.url.pathname.startsWith('/read'));
+	// App-only chrome; hide on public /read pages and the login page.
+	let appChrome = $derived(
+		!page.url.pathname.startsWith('/read') && page.url.pathname !== '/login'
+	);
 
 	const label: Record<string, string> = {
 		idle: 'synced',
@@ -21,11 +23,12 @@
 	<a class="wordmark meta" href="/">syneidesis</a>
 
 	<nav>
-		{#if showSync}
+		{#if appChrome}
 			<span class="sync meta" data-state={sync.status} title="Sync status">
 				<span class="syncdot"></span>
 				{label[sync.status]}
 			</span>
+			<a class="acct meta" href="/account" title="Account">account</a>
 		{/if}
 		<button
 			type="button"
@@ -80,6 +83,14 @@
 		transition: color var(--dur-fast) var(--ease-out);
 	}
 	.wordmark:hover {
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	.acct {
+		color: var(--muted);
+	}
+	.acct:hover {
 		color: var(--ink);
 		text-decoration: none;
 	}
